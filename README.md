@@ -24,9 +24,9 @@ The system also prevents **overlapping bookings** using database transactions.
 ```bash
 git clone https://github.com/yourusername/room-booking-api.git
 cd room-booking-api
+```
 
-
-Create a .env file in the root folder.
+# Create a .env file in the root folder.
 
 Example:
 
@@ -38,3 +38,14 @@ DB_PASSWORD=yourpassword
 DB_NAME=roombooking
 
 JWT_SECRET=supersecretkey
+
+# Start the Server
+npm start
+
+or using nodemon
+
+npx nodemon server.js
+
+Server will start on
+
+http://localhost:5000
