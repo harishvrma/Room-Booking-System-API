@@ -1,0 +1,46 @@
+ARCHITECTURE NOTES
+
+1. How overlapping bookings are prevented
+
+To prevent overlapping bookings, the system checks the database before inserting a new booking.
+
+It runs a query that looks for bookings of the same room where the dates overlap with the requested booking dates.
+
+Example logic:
+check_in < existing_check_out AND check_out > existing_check_in
+
+If any record is found, it means the room is already booked for those dates. In that case the API returns an error saying "Room not available for selected dates".
+
+This ensures that two bookings cannot exist for the same room during overlapping time periods.
+
+
+2. What happens if two users try to book at the same time
+
+If two users try to book the same room at the same time, the backend uses database transactions to keep the data consistent.
+
+The process works like this:
+
+1. Start a database transaction
+2. Check if the room is available
+3. If available, insert the booking
+4. Commit the transaction
+
+If two requests come at the same time, one request will complete first and insert the booking.  
+When the second request checks availability, it will detect that a booking already exists and it will fail with "Room not available".
+
+This prevents double booking.
+
+
+3. How the system can be scaled in the future
+
+Microservices  
+The system can be divided into separate services such as:
+Authentication Service  
+Booking Service  
+Room Service  
+
+Load balancing  
+Multiple backend servers can be used behind a load balancer to handle more traffic.
+
+Cloud scaling  
+The application can be deployed using Docker and Kubernetes so it can automatically scale when traffic increases.
